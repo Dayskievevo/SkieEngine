@@ -10,6 +10,7 @@ namespace Pong
         Paddle paddle, paddle2;
         Ball ball;
         SpriteFont font;
+        Globals.GAME_STATE state;
 
         public Game1()
         {
@@ -27,6 +28,8 @@ namespace Pong
             paddle2 = new Paddle(true);
             ball = new Ball();
             base.Initialize();
+
+            state = Globals.GAME_STATE.MENU;
         }
 
         protected override void LoadContent()
@@ -46,9 +49,29 @@ namespace Pong
                 Exit();
 
             // TODO: Add your update logic here
-            paddle.Update(gameTime);
-            paddle2.Update(gameTime);
-            ball.Update(gameTime, paddle, paddle2);
+
+            switch (state)
+            {
+                case Globals.GAME_STATE.MENU:
+                    {
+                        if(Keyboard.GetState().IsKeyDown(Keys.E)) { state = Globals.GAME_STATE.GAME; }
+                        break;
+                    }
+                case Globals.GAME_STATE.GAME:
+                    {
+                        paddle.Update(gameTime);
+                        paddle2.Update(gameTime);
+                        ball.Update(gameTime, paddle, paddle2);
+                        break;
+                    }
+                case Globals.GAME_STATE.OVER:
+                    {
+                        if (Keyboard.GetState().IsKeyDown(Keys.E)) { state = Globals.GAME_STATE.GAME; }
+                        break;
+                    }
+            }
+
+
 
             base.Update(gameTime);
         }
@@ -59,12 +82,30 @@ namespace Pong
 
             Globals.spriteBatch.Begin();
             // add drawing
-            paddle.Draw();
-            paddle2.Draw();
-            ball.Draw();
 
-            Globals.spriteBatch.DrawString(font, Globals.player1_score.ToString(), new Vector2(100, 50), Color.White);
-            Globals.spriteBatch.DrawString(font, Globals.player2_score.ToString(), new Vector2(Globals.WIDTH - 112, 50), Color.White);
+            switch (state)
+            {
+                case Globals.GAME_STATE.MENU:
+                    {
+                        Globals.spriteBatch.DrawString(font, "Main Menu XD\n   Press 'E' To Start", new Vector2(Globals.WIDTH / 2 - 50, Globals.HEIGHT / 2 - 50), Color.White);
+                        break;
+                    }
+                case Globals.GAME_STATE.GAME:
+                    {
+                        paddle.Draw();
+                        paddle2.Draw();
+                        ball.Draw();
+
+                        Globals.spriteBatch.DrawString(font, Globals.player1_score.ToString(), new Vector2(100, 50), Color.White);
+                        Globals.spriteBatch.DrawString(font, Globals.player2_score.ToString(), new Vector2(Globals.WIDTH - 112, 50), Color.White);
+                        break;
+                    }
+                case Globals.GAME_STATE.OVER:
+                    {
+                        Globals.spriteBatch.DrawString(font, "lol", new Vector2(Globals.WIDTH / 2 - 50, Globals.HEIGHT / 2 - 50), Color.White);
+                        break;
+                    }
+            }
 
             Globals.spriteBatch.End();
 
