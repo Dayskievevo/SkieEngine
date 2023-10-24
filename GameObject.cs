@@ -1,62 +1,24 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System.Runtime.InteropServices;
-using System;
 
 namespace Pong
 {
-    public class GameObject
+    public abstract class GameObject
     {
-        protected Texture2D _texture;
-
+        public Texture2D _texture;
         public Vector2 position;
+        public Rectangle rect;
         public Color color = Color.White;
         public float speed = 100f;
+        public int width, height;
         public Input input;
 
-        public GameObject(Texture2D texture)
+        public abstract void Start();
+        public abstract void Update(GameTime gametime);
+        public  void Draw(SpriteBatch spriteBatch)
         {
-            _texture = texture;
+            rect = new Rectangle((int)position.X, (int)position.Y, width, height);
+            spriteBatch.Draw(Globals.pixel, rect, color);
         }
-
-        public void Update(GameTime gametime)
-        {
-            Move(gametime);
-        }
-
-        private void Move(GameTime gametime)
-        {
-            if (input == null) { return; }
-
-            float deltaTime = (float)gametime.ElapsedGameTime.TotalSeconds;
-
-            if (Keyboard.GetState().IsKeyDown(input.Left))
-            {
-                position.X -= speed * deltaTime;
-            }
-
-            if (Keyboard.GetState().IsKeyDown(input.Right))
-            {
-                position.X += speed * deltaTime;
-            }
-
-            if (Keyboard.GetState().IsKeyDown(input.Up))
-            {
-                position.Y -= speed * deltaTime;
-            }
-
-            if (Keyboard.GetState().IsKeyDown(input.Down))
-            {
-                position.Y += speed * deltaTime;
-            }
-        }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(_texture, position, color);
-        }
-
-
     }
 }

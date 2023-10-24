@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 
 namespace Pong
@@ -8,8 +9,6 @@ namespace Pong
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
-        SpriteFont font;
-
         private List<GameObject> _gameObjects;
 
         public Game1()
@@ -34,27 +33,58 @@ namespace Pong
             Globals.spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+
+            // the pixel texture
             Globals.pixel = new Texture2D(GraphicsDevice, 1, 1);
             Globals.pixel.SetData(new Color[] { Color.White });
 
             var texture = Globals.pixel;
 
+            // setup objects 
             _gameObjects = new List<GameObject>()
             {
-                new GameObject(texture) {
-                    position = new Vector2(100, 100),
+                // player one
+                new Paddle(texture) {
+                    width = 20,
+                    height = 200,
+                    position = new Vector2(0,Globals.HEIGHT / 2 - 100),
+                    color = Color.White,
                     input = new Input() {
-                        Up = Keys.W,
+
                         Down = Keys.S,
-                        Left = Keys.A,
-                        Right = Keys.D 
+                        Up = Keys.W,
                     }
+                },
+
+                //player 2
+                new Paddle(texture) {
+                    width = 20,
+                    height = 200,
+                    position = new Vector2(Globals.WIDTH - 20,Globals.HEIGHT / 2 - 100),
+                    color = Color.White,
+                    input = new Input() {
+
+                        Down = Keys.Down,
+                        Up = Keys.Up,
+                    }
+                },
+
+                // ball
+                new Ball(texture)
+                {
+                    width = 20,
+                    height = 20,
+                    position = new Vector2(Globals.WIDTH / 2 - 20,Globals.HEIGHT / 2 - 20),
+                    color = Color.Red,
                 }
              };
 
-            
+            // copy unity lol
 
-            font = Content.LoadLocalized<SpriteFont>("Score");
+            foreach (var gameObject in _gameObjects)
+            {
+                gameObject.Start();
+            }
         }
 
         protected override void Update(GameTime gameTime)

@@ -1,54 +1,47 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Pong
 {
-    public class Ball
+    public class Ball : GameObject
     {
-        Rectangle rect;
-        int right = 1, top = 1, moveSpeed = 200;
+        int right = 1, top = 1;
 
-        public Ball() {
-            rect = new Rectangle(Globals.WIDTH / 2 - 20, Globals.HEIGHT / 2 - 20, 40, 40);
+        public Ball(Texture2D texture) {
+            _texture = texture;
+            speed = 100;
         }
-        public void Update(GameTime gameTime, Paddle player1, Paddle player2) {
-            int deltaSpeed = (int)(moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
-            rect.X += right * deltaSpeed;
-            rect.Y += top * deltaSpeed;
 
-            if(player1.rect.Right > rect.Left && rect.Top > player1.rect.Top && rect.Bottom < player1.rect.Bottom)
-            {
-                right = 1;
-            }
-
-            if (player2.rect.Left < rect.Right && rect.Top > player2.rect.Top && rect.Bottom < player2.rect.Bottom)
-            {
-                right = -1;
-            }
-
-            if (rect.Y < 0) { top *= -1; }
-            if (rect.Y > Globals.HEIGHT - rect.Height) {  top *= -1; }
-
-            if(rect.X < 0 )
-            {
-                Globals.player2_score += 1;
-                resetGame();
-            }
-
-            if (rect.X > Globals.WIDTH - rect.Width)
-            {
-                Globals.player1_score += 1;
-                resetGame();
-            }
-        }
-        public void Draw()
+        public override void Start()
         {
-            Globals.spriteBatch.Draw(Globals.pixel, rect, Color.White);
+
         }
 
-        public void resetGame()
+        public override void Update(GameTime gameTime) {
+            //Move(gameTime);
+        }
+
+        // unless i need to manuelly set the draw for some reason
+        // leaving it in gameobject should be fine?
+
+        //public override void Draw(SpriteBatch spriteBatch)
+        //{
+        //    rect = new Rectangle((int)position.X, (int)position.Y, width, height);
+        //    spriteBatch.Draw(Globals.pixel, rect, color);
+        //}
+
+        private void Move(GameTime gameTime)
         {
-            rect.X = Globals.WIDTH / 2 - 20;
-            rect.Y = Globals.HEIGHT / 2 - 20;
+            int deltaSpeed = (int)(speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            position.X += right * deltaSpeed;
+            position.Y += top * deltaSpeed;
+        }
+
+        public void resetBallPos()
+        {
+            position.X = Globals.WIDTH / 2 - width;
+            position.Y = Globals.HEIGHT / 2 - height;
         }
     }
 }
