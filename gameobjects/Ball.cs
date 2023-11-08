@@ -6,30 +6,22 @@ namespace Pong
 {
     public class Ball : GameObject
     {
-        int right = 1, top = 1;
-
-        public Ball(Texture2D texture) {
+        public Ball(string name, Texture2D texture) {
+            this.name = name;
             _texture = texture;
-            speed = 100;
         }
+
+        public float speed = 100f;
+        int right = 1, top = 1;
 
         public override void Start()
         {
-
+            resetBallPos();
         }
 
         public override void Update(GameTime gameTime) {
             //Move(gameTime);
         }
-
-        // unless i need to manuelly set the draw for some reason
-        // leaving it in gameobject should be fine?
-
-        //public override void Draw(SpriteBatch spriteBatch)
-        //{
-        //    rect = new Rectangle((int)position.X, (int)position.Y, width, height);
-        //    spriteBatch.Draw(Globals.pixel, rect, color);
-        //}
 
         private void Move(GameTime gameTime)
         {
@@ -40,8 +32,8 @@ namespace Pong
 
         public void resetBallPos()
         {
-            position.X = Globals.WIDTH / 2 - width;
-            position.Y = Globals.HEIGHT / 2 - height;
+            position.X = GameManager.WIDTH / 2 - width;
+            position.Y = GameManager.HEIGHT / 2 - height;
         }
     }
 }

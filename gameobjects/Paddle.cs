@@ -1,22 +1,30 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+using Collision;
 
 namespace Pong
 {
     public class Paddle : GameObject {
 
-        public Paddle(Texture2D texture) {
+        public Paddle(string name,Texture2D texture) {
+            this.name = name;
             _texture = texture;
-            speed = 500f;
         }
 
+        // gameobject components
+        public BoxCollider2D box2D;
+
+        public float speed = 300f;
         public override void Start()
         {
-
+            
         }
 
         public override void Update(GameTime gameTime) {
+            box2D = new BoxCollider2D(height, width, position, false);
             Move(gameTime);
         }
 

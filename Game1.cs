@@ -9,13 +9,14 @@ namespace Pong
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
-        private List<GameObject> _gameObjects;
+        private SpriteFont font;
+        private string ObjectsInScene;
 
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
-            _graphics.PreferredBackBufferWidth = Globals.WIDTH;
-            _graphics.PreferredBackBufferHeight = Globals.HEIGHT;
+            _graphics.PreferredBackBufferWidth = GameManager.WIDTH;
+            _graphics.PreferredBackBufferHeight = GameManager.HEIGHT;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -30,60 +31,73 @@ namespace Pong
 
         protected override void LoadContent()
         {
-            Globals.spriteBatch = new SpriteBatch(GraphicsDevice);
+            GameManager.spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
 
             // the pixel texture
-            Globals.pixel = new Texture2D(GraphicsDevice, 1, 1);
-            Globals.pixel.SetData(new Color[] { Color.White });
+            GameManager.pixel = new Texture2D(GraphicsDevice, 1, 1);
+            GameManager.pixel.SetData(new Color[] { Color.White });
 
-            var texture = Globals.pixel;
+            // text
+            font = Content.Load<SpriteFont>("Score");
+
+            var texture = GameManager.pixel;
 
             // setup objects 
-            _gameObjects = new List<GameObject>()
+            GameManager._gameObjects = new List<GameObject>()
             {
                 // player one
-                new Paddle(texture) {
+                new Paddle("Player One", texture) {
                     width = 20,
                     height = 200,
-                    position = new Vector2(0,Globals.HEIGHT / 2 - 100),
+                    position = new Vector2(0,GameManager.HEIGHT / 2 - 100),
                     color = Color.White,
                     input = new Input() {
-
                         Down = Keys.S,
                         Up = Keys.W,
                     }
                 },
 
                 //player 2
-                new Paddle(texture) {
+                new Paddle("Player two",texture) {
                     width = 20,
                     height = 200,
-                    position = new Vector2(Globals.WIDTH - 20,Globals.HEIGHT / 2 - 100),
+                    position = new Vector2(GameManager.WIDTH - 20,GameManager.HEIGHT / 2 - 100),
                     color = Color.White,
                     input = new Input() {
-
                         Down = Keys.Down,
                         Up = Keys.Up,
                     }
                 },
 
                 // ball
-                new Ball(texture)
+                new Ball("ball",texture)
                 {
                     width = 20,
                     height = 20,
-                    position = new Vector2(Globals.WIDTH / 2 - 20,Globals.HEIGHT / 2 - 20),
+                    position = new Vector2(0,0),
                     color = Color.Red,
+                },
+                //collision tester
+                new Dummy("dummy", texture) {
+                    width = 30,
+                    height = 30,
+                    position = new Vector2(0,0),
+                    color = Color.Green,
                 }
              };
 
             // copy unity lol
-
-            foreach (var gameObject in _gameObjects)
+            foreach (var gameObject in GameManager._gameObjects)
             {
                 gameObject.Start();
+            }
+
+            ObjectsInScene = "Gameobjects: \n";
+            foreach(var gameObject in GameManager._gameObjects)
+            {
+                ObjectsInScene += gameObject.getGameObject() + "\n";
             }
         }
 
@@ -91,14 +105,12 @@ namespace Pong
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
             // TODO: Add your update logic here
 
-            foreach (var gameObject in _gameObjects)
+            foreach (var gameObject in GameManager._gameObjects)
             {
                 gameObject.Update(gameTime);
             }
-
 
             base.Update(gameTime);
         }
@@ -106,12 +118,12 @@ namespace Pong
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            Globals.spriteBatch.Begin();
-            foreach(var gameObject in _gameObjects)
-            {
-                gameObject.Draw(Globals.spriteBatch);
-            }
-            Globals.spriteBatch.End();
+            GameManager.spriteBatch.Begin();
+
+            GameManager.Draw();
+            GameManager.spriteBatch.DrawString(font, ObjectsInScene, new Vector2(0, 0), Color.White);
+
+            GameManager.spriteBatch.End();
 
             base.Draw(gameTime);
         }
