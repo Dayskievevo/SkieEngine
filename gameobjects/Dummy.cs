@@ -24,12 +24,12 @@ namespace Pong {
         
         public override void Update(GameTime gameTime){
             box2D = new BoxCollider2D(height, width, position, false);
-            box2D.CheckCollision(this);
+            box2D.CheckCollisionSimple(this);
             
             //col = box2D.isColliding ? "true" : "false";
             color = box2D.isColliding ? Color.Red : Color.Green;
             _mouseState = Mouse.GetState();
-
+            
             position.X = _mouseState.Position.X - (rect.Width / 2);
             position.Y = _mouseState.Position.Y - (rect.Height / 2);
         }

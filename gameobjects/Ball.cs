@@ -14,7 +14,7 @@ namespace Pong
 
         public BoxCollider2D box2D;
 
-        public float speed = 600f;
+        public float speed = 250f;
         int right = 1, top = 1;
 
         public override void Start()
@@ -24,7 +24,7 @@ namespace Pong
 
         public override void Update(GameTime gameTime) {
             box2D = new BoxCollider2D(height, width, position, false);
-            box2D.CheckCollision(this);
+            box2D.CheckCollisionSimple(this);
             Move(gameTime);
 
             if(position.X < 0 || position.X + rect.Width > GameManager.WIDTH) {

@@ -16,12 +16,15 @@ namespace Collision {
         public bool isCollidingBounds;
         public Rectangle collider;
 
+        // TODO: RESTRUCTRE SO THERE CAN BE DIFFERENT SHAPES OF COLLISION 
+        // IMPLEMENT TRIGGER SO IT GETS ACTIVATED BUT THINGS PASS THROUGH IT
+        // FIX WEIRD COLLISION BUG WITH MOVING OBJECTS
+        // FIGURE OUT HOW TO GET DIRECTIONAL DETECTION?
         public BoxCollider2D(int h, int w, Vector2 pos, bool isTrigger) {
             height = h;
             width = w;
             position = pos;
             this.isTrigger = isTrigger;
-
             collider = new Rectangle((int)position.X, (int)position.Y, width, height);
         }
 
@@ -29,7 +32,7 @@ namespace Collision {
             this.isTrigger = isTrigger;
         }
 
-        public void CheckCollision(GameObject owner) {
+        public void CheckCollisionSimple(GameObject owner) {
 
             // box2d
             foreach(GameObject gameObject in GameManager._gameObjects) {
@@ -49,10 +52,8 @@ namespace Collision {
             if(owner.position.Y < 0 || owner.position.Y + owner.rect.Height > GameManager.HEIGHT) {
                 isCollidingBounds = true;
             }
-
         }
-        
-        
+
     }
 }
 

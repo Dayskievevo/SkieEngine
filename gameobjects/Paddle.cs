@@ -25,7 +25,7 @@ namespace Pong
 
         public override void Update(GameTime gameTime) {
             box2D = new BoxCollider2D(height, width, position, false);
-            box2D.CheckCollision(this);
+            box2D.CheckCollisionSimple(this);
             Move(gameTime);
         }
 
