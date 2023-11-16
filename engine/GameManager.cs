@@ -26,5 +26,15 @@ namespace Pong
                 gameObject.Draw(spriteBatch);
             }
         }
+        
+        public static string getGameObjects() {
+            string temp = "Gameobjects: \n";
+            foreach(var gameObject in _gameObjects)
+            {
+                temp += gameObject.getGameObject() + ": " +  gameObject.getGameObjectPos() + "\n";
+            }
+
+            return temp;
+        }
     }
 }

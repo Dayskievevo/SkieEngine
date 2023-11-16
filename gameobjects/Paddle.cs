@@ -25,6 +25,7 @@ namespace Pong
 
         public override void Update(GameTime gameTime) {
             box2D = new BoxCollider2D(height, width, position, false);
+            box2D.CheckCollision(this);
             Move(gameTime);
         }
 
@@ -34,23 +35,19 @@ namespace Pong
 
             float deltaTime = (float)gametime.ElapsedGameTime.TotalSeconds;
 
-            if (Keyboard.GetState().IsKeyDown(input.Left))
-            {
+            if (Keyboard.GetState().IsKeyDown(input.Left)){
                 position.X -= speed * deltaTime;
             }
 
-            if (Keyboard.GetState().IsKeyDown(input.Right))
-            {
+            if (Keyboard.GetState().IsKeyDown(input.Right)){
                 position.X += speed * deltaTime;
             }
 
-            if (Keyboard.GetState().IsKeyDown(input.Up))
-            {
+            if (Keyboard.GetState().IsKeyDown(input.Up)){
                 position.Y -= speed * deltaTime;
             }
 
-            if (Keyboard.GetState().IsKeyDown(input.Down))
-            {
+            if (Keyboard.GetState().IsKeyDown(input.Down)){
                 position.Y += speed * deltaTime;
             }
         }

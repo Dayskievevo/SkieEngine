@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Collision;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
@@ -11,7 +12,9 @@ namespace Pong
             _texture = texture;
         }
 
-        public float speed = 100f;
+        public BoxCollider2D box2D;
+
+        public float speed = 600f;
         int right = 1, top = 1;
 
         public override void Start()
@@ -20,12 +23,21 @@ namespace Pong
         }
 
         public override void Update(GameTime gameTime) {
-            //Move(gameTime);
+            box2D = new BoxCollider2D(height, width, position, false);
+            box2D.CheckCollision(this);
+            Move(gameTime);
+
+            if(position.X < 0 || position.X + rect.Width > GameManager.WIDTH) {
+                right *= -1;
+            }
         }
 
         private void Move(GameTime gameTime)
         {
             int deltaSpeed = (int)(speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            if(box2D.isColliding) { right *= -1;}
+            if(box2D.isCollidingBounds) { top *= -1; }
+
             position.X += right * deltaSpeed;
             position.Y += top * deltaSpeed;
         }

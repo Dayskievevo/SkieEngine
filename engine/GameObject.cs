@@ -25,5 +25,9 @@ namespace Pong
         public string getGameObject() {
             return name;
         }
+
+        public string getGameObjectPos() {
+            return "X: " + Math.Round(position.X, 2, MidpointRounding.AwayFromZero) + " Y: " + Math.Round(position.Y, 2, MidpointRounding.AwayFromZero);
+        }
     }
 }

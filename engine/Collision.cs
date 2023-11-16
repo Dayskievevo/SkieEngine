@@ -11,6 +11,9 @@ namespace Collision {
         private int height, width;
         private Vector2 position;
         private bool isTrigger;
+        public bool isColliding;
+        // checking screen collisions
+        public bool isCollidingBounds;
         public Rectangle collider;
 
         public BoxCollider2D(int h, int w, Vector2 pos, bool isTrigger) {
@@ -26,13 +29,30 @@ namespace Collision {
             this.isTrigger = isTrigger;
         }
 
-        public bool isColliding(GameObject owner) {
+        public void CheckCollision(GameObject owner) {
+
+            // box2d
             foreach(GameObject gameObject in GameManager._gameObjects) {
                 if(gameObject == owner) { continue; }
-                return collider.Intersects(gameObject.rect);
+
+                if(owner.rect.Right >= gameObject.rect.Left && owner.rect.Left <= gameObject.rect.Right && 
+                owner.rect.Bottom >= gameObject.rect.Top && owner.rect.Top <= gameObject.rect.Bottom)
+                {
+                   isColliding = true;
+                }
+                if(isColliding) {
+                    break;
+                }
             }
-            return false;
+
+            // screen bounds checking
+            if(owner.position.Y < 0 || owner.position.Y + owner.rect.Height > GameManager.HEIGHT) {
+                isCollidingBounds = true;
+            }
+
         }
+        
+        
     }
 }
 

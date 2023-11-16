@@ -10,8 +10,6 @@ namespace Pong
     {
         private GraphicsDeviceManager _graphics;
         private SpriteFont font;
-        private string ObjectsInScene;
-
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -56,6 +54,8 @@ namespace Pong
                     input = new Input() {
                         Down = Keys.S,
                         Up = Keys.W,
+                        Right = Keys.D,
+                        Left = Keys.A
                     }
                 },
 
@@ -94,11 +94,7 @@ namespace Pong
                 gameObject.Start();
             }
 
-            ObjectsInScene = "Gameobjects: \n";
-            foreach(var gameObject in GameManager._gameObjects)
-            {
-                ObjectsInScene += gameObject.getGameObject() + "\n";
-            }
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -121,7 +117,7 @@ namespace Pong
             GameManager.spriteBatch.Begin();
 
             GameManager.Draw();
-            GameManager.spriteBatch.DrawString(font, ObjectsInScene, new Vector2(0, 0), Color.White);
+            GameManager.spriteBatch.DrawString(font, GameManager.getGameObjects(), new Vector2(0, 0), Color.White);
 
             GameManager.spriteBatch.End();
 
