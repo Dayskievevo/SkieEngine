@@ -14,6 +14,7 @@ namespace Pong
         public Color color = Color.White;
         public int width, height;
         public Input input;
+        public BoxCollider2D Box2D = null;
 
         public abstract void Start();
         public abstract void Update(GameTime gametime);

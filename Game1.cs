@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Pong
 {
@@ -10,11 +11,12 @@ namespace Pong
     {
         private GraphicsDeviceManager _graphics;
         private SpriteFont font;
+        private bool keyPressed = false;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
-            _graphics.PreferredBackBufferWidth = GameManager.WIDTH;
-            _graphics.PreferredBackBufferHeight = GameManager.HEIGHT;
+            _graphics.PreferredBackBufferWidth = Manager.WIDTH;
+            _graphics.PreferredBackBufferHeight = Manager.HEIGHT;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -29,33 +31,31 @@ namespace Pong
 
         protected override void LoadContent()
         {
-            GameManager.spriteBatch = new SpriteBatch(GraphicsDevice);
+            Manager.spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
 
             // the pixel texture
-            GameManager.pixel = new Texture2D(GraphicsDevice, 1, 1);
-            GameManager.pixel.SetData(new Color[] { Color.White });
+            Manager.pixel = new Texture2D(GraphicsDevice, 1, 1);
+            Manager.pixel.SetData(new Color[] { Color.White });
 
             // text
             font = Content.Load<SpriteFont>("Score");
 
-            var texture = GameManager.pixel;
+            var texture = Manager.pixel;
 
             // setup objects 
-            GameManager._gameObjects = new List<GameObject>()
+            Manager._gameObjects = new List<GameObject>()
             {
                 // player one
                 new Paddle("Player One", texture) {
                     width = 40,
                     height = 400,
-                    position = new Vector2(100,GameManager.HEIGHT / 2 - 200),
+                    position = new Vector2(100,Manager.HEIGHT / 2 - 200),
                     color = Color.White,
                     input = new Input() {
                         Down = Keys.S,
                         Up = Keys.W,
-                        Right = Keys.D,
-                        Left = Keys.A
                     }
                 },
 
@@ -63,7 +63,7 @@ namespace Pong
                 new Paddle("Player two",texture) {
                     width = 40,
                     height = 400,
-                    position = new Vector2(GameManager.WIDTH - 40 - 100,GameManager.HEIGHT / 2 - 200),
+                    position = new Vector2(Manager.WIDTH - 40 - 100,Manager.HEIGHT / 2 - 200),
                     color = Color.White,
                     input = new Input() {
                         Down = Keys.Down,
@@ -71,30 +71,22 @@ namespace Pong
                     }
                 },
 
-                // ball
+                //ball
                 new Ball("ball",texture)
                 {
                     width = 40,
                     height = 40,
                     position = new Vector2(0,0),
-                    color = Color.Red,
-                },
-                //collision tester
-                new Dummy("dummy", texture) {
-                    width = 30,
-                    height = 30,
-                    position = new Vector2(0,0),
                     color = Color.White,
-                }
-             };
+                },
 
+                //collision tester
+             };
             // copy unity lol
-            foreach (var gameObject in GameManager._gameObjects)
+            foreach (var gameObject in Manager._gameObjects)
             {
                 gameObject.Start();
             }
-
-
         }
 
         protected override void Update(GameTime gameTime)
@@ -102,11 +94,19 @@ namespace Pong
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             // TODO: Add your update logic here
-
-            foreach (var gameObject in GameManager._gameObjects)
+            foreach (var gameObject in Manager._gameObjects)
             {
                 gameObject.Update(gameTime);
             }
+
+            // debug stuff
+            if(Keyboard.GetState().IsKeyDown(Keys.Tab) && !keyPressed) {
+                Manager.DEBUGINFO = !Manager.DEBUGINFO;
+                keyPressed = true;    
+             }
+            if(Keyboard.GetState().IsKeyUp(Keys.Tab)) {
+                keyPressed = false;
+            } 
 
             base.Update(gameTime);
         }
@@ -114,12 +114,16 @@ namespace Pong
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            GameManager.spriteBatch.Begin();
+            Manager.spriteBatch.Begin();
 
-            GameManager.Draw();
-            GameManager.spriteBatch.DrawString(font, GameManager.getGameObjects(), new Vector2(0, 0), Color.White);
+            Manager.Draw();
+            Manager.spriteBatch.DrawString(font, GameManager.GameTracker.getP1Score().ToString(), new Vector2(Manager.WIDTH / 2,20), Color.White);
+             Manager.spriteBatch.DrawString(font, GameManager.GameTracker.getP2Score().ToString(), new Vector2((Manager.WIDTH / 2) + 40,20), Color.White);
+            if(Manager.DEBUGINFO) {
+                Manager.spriteBatch.DrawString(font, Manager.getGameObjects(), new Vector2(0, 0), Color.White);
+            }
 
-            GameManager.spriteBatch.End();
+            Manager.spriteBatch.End();
 
             base.Draw(gameTime);
         }

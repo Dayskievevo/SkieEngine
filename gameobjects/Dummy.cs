@@ -15,7 +15,6 @@ namespace Pong {
         
         // components
         MouseState _mouseState;
-        BoxCollider2D box2D;
         public string col = "null";
 
         public override void Start() {
@@ -23,8 +22,8 @@ namespace Pong {
         }
         
         public override void Update(GameTime gameTime){
-            box2D = new BoxCollider2D(height, width, position, false);
-            box2D.CheckCollisionDirectional(this);
+            Box2D = new BoxCollider2D(height, width, position, false);
+            Box2D.CheckCollisionDirectional(this);
             
             //col = box2D.isColliding ? "true" : "false";
             _mouseState = Mouse.GetState();

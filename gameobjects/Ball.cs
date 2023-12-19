@@ -13,10 +13,8 @@ namespace Pong
             _texture = texture;
         }
 
-        public BoxCollider2D box2D;
-
         public float speed = 500f;
-        int right = 1, top = 1;
+        int right = -1, top = 1;
 
         public override void Start()
         {
@@ -24,23 +22,30 @@ namespace Pong
         }
 
         public override void Update(GameTime gameTime) {
-            box2D = new BoxCollider2D(height, width, position, false);
-            box2D.CheckCollisionDirectional(this);
+            Box2D = new BoxCollider2D(height, width, position, false);
+            Box2D.CheckCollisionDirectional(this);
 
             // what to do if collission occurs
-            if(box2D.isTouchingLeft) { right = -1;}
-            if(box2D.isTouchingRight) { right = 1; }
-            if(box2D.isTouhcingTop) { top = -1; }
-            if(box2D.IsTouchingBottom) { top = 1; }
+            if(Box2D.isTouchingLeft) { right = -1;}
+            if(Box2D.isTouchingRight) { right = 1; }
+            if(Box2D.isTouhcingTop) { top = -1; }
+            if(Box2D.IsTouchingBottom) { top = 1; }
 
-            if(box2D.boundsTop || box2D.boundsBottom) {
+            if(Box2D.boundsTop || Box2D.boundsBottom) {
                 top *= -1;
             }
 
             Move(gameTime);
 
-            if(position.X < 0 || position.X + rect.Width > GameManager.WIDTH) {
+            // p2 scores goal
+            if(position.X < 0) {
+                GameManager.GameTracker.PlayerScored(false);
                 resetBallPos();
+            }
+
+            if(position.X + rect.Width > Manager.WIDTH) {
+                GameManager.GameTracker.PlayerScored(true);
+                resetBallPos();     
             }
         }
 
@@ -53,8 +58,9 @@ namespace Pong
 
         public void resetBallPos()
         {
-            position.X = GameManager.WIDTH / 2 - width;
-            position.Y = GameManager.HEIGHT / 2 - height;
+            right *= -1;
+            position.X = Manager.WIDTH / 2 - width;
+            position.Y = Manager.HEIGHT / 2 - height;
         }
     }
 }

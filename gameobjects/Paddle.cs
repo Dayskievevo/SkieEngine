@@ -15,47 +15,52 @@ namespace Pong
         }
 
         // gameobject components
-        public BoxCollider2D box2D;
-
-        public float speed = 500f;
+        public float speed = 500f;        
         public override void Start()
         {
-            
+
         }
 
         public override void Update(GameTime gameTime) {
-            box2D = new BoxCollider2D(height, width, position, false);
-            box2D.CheckCollisionDirectional(this);
+            Box2D = new BoxCollider2D(height, width, position, false);
+            Box2D.CheckCollisionDirectional(this);
+
+            if(Box2D.boundsTop) {
+                position.Y = 0;
+            }
+            if(Box2D.boundsBottom) {
+                position.Y = Manager.HEIGHT - height;
+            }
+
             Move(gameTime);
         }
 
         private void Move(GameTime gametime)
         {
             if (input == null) { return; }
-            if(box2D.boundsTop) {
-                color = Color.Red;
-                position.Y = 0;
-            }
-            if(box2D.boundsBottom) {
-                color = Color.Blue;
-                position.Y = GameManager.HEIGHT - height;
-            }
+
 
             float deltaTime = (float)gametime.ElapsedGameTime.TotalSeconds;
 
-            if (Keyboard.GetState().IsKeyDown(input.Left)){
+            if (Keyboard.GetState().IsKeyDown(input.Left) ){
+                if(Box2D.isTouchingRight) {
+                    return;
+                }
                 position.X -= speed * deltaTime;
             }
 
             if (Keyboard.GetState().IsKeyDown(input.Right)){
+                if(Box2D.isTouchingLeft) {return;}
                 position.X += speed * deltaTime;
             }
 
             if (Keyboard.GetState().IsKeyDown(input.Up)){
+                if(Box2D.IsTouchingBottom) {return;}
                 position.Y -= speed * deltaTime;
             }
 
             if (Keyboard.GetState().IsKeyDown(input.Down)){
+                if(Box2D.isTouhcingTop) {return;}
                 position.Y += speed * deltaTime;
             }
         }
