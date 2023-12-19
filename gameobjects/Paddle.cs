@@ -17,7 +17,7 @@ namespace Pong
         // gameobject components
         public BoxCollider2D box2D;
 
-        public float speed = 300f;
+        public float speed = 500f;
         public override void Start()
         {
             
@@ -25,13 +25,21 @@ namespace Pong
 
         public override void Update(GameTime gameTime) {
             box2D = new BoxCollider2D(height, width, position, false);
-            box2D.CheckCollisionSimple(this);
+            box2D.CheckCollisionDirectional(this);
             Move(gameTime);
         }
 
         private void Move(GameTime gametime)
         {
             if (input == null) { return; }
+            if(box2D.boundsTop) {
+                color = Color.Red;
+                position.Y = 0;
+            }
+            if(box2D.boundsBottom) {
+                color = Color.Blue;
+                position.Y = GameManager.HEIGHT - height;
+            }
 
             float deltaTime = (float)gametime.ElapsedGameTime.TotalSeconds;
 

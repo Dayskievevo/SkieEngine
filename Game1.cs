@@ -47,9 +47,9 @@ namespace Pong
             {
                 // player one
                 new Paddle("Player One", texture) {
-                    width = 20,
-                    height = 200,
-                    position = new Vector2(0,GameManager.HEIGHT / 2 - 100),
+                    width = 40,
+                    height = 400,
+                    position = new Vector2(100,GameManager.HEIGHT / 2 - 200),
                     color = Color.White,
                     input = new Input() {
                         Down = Keys.S,
@@ -61,9 +61,9 @@ namespace Pong
 
                 //player 2
                 new Paddle("Player two",texture) {
-                    width = 20,
-                    height = 200,
-                    position = new Vector2(GameManager.WIDTH - 20,GameManager.HEIGHT / 2 - 100),
+                    width = 40,
+                    height = 400,
+                    position = new Vector2(GameManager.WIDTH - 40 - 100,GameManager.HEIGHT / 2 - 200),
                     color = Color.White,
                     input = new Input() {
                         Down = Keys.Down,
@@ -74,8 +74,8 @@ namespace Pong
                 // ball
                 new Ball("ball",texture)
                 {
-                    width = 20,
-                    height = 20,
+                    width = 40,
+                    height = 40,
                     position = new Vector2(0,0),
                     color = Color.Red,
                 },
@@ -84,7 +84,7 @@ namespace Pong
                     width = 30,
                     height = 30,
                     position = new Vector2(0,0),
-                    color = Color.Green,
+                    color = Color.White,
                 }
              };
 

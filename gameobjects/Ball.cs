@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Runtime.Serialization;
 
 namespace Pong
 {
@@ -14,7 +15,7 @@ namespace Pong
 
         public BoxCollider2D box2D;
 
-        public float speed = 250f;
+        public float speed = 500f;
         int right = 1, top = 1;
 
         public override void Start()
@@ -24,20 +25,28 @@ namespace Pong
 
         public override void Update(GameTime gameTime) {
             box2D = new BoxCollider2D(height, width, position, false);
-            box2D.CheckCollisionSimple(this);
+            box2D.CheckCollisionDirectional(this);
+
+            // what to do if collission occurs
+            if(box2D.isTouchingLeft) { right = -1;}
+            if(box2D.isTouchingRight) { right = 1; }
+            if(box2D.isTouhcingTop) { top = -1; }
+            if(box2D.IsTouchingBottom) { top = 1; }
+
+            if(box2D.boundsTop || box2D.boundsBottom) {
+                top *= -1;
+            }
+
             Move(gameTime);
 
             if(position.X < 0 || position.X + rect.Width > GameManager.WIDTH) {
-                right *= -1;
+                resetBallPos();
             }
         }
 
         private void Move(GameTime gameTime)
         {
             int deltaSpeed = (int)(speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
-            if(box2D.isColliding) { right *= -1;}
-            if(box2D.isCollidingBounds) { top *= -1; }
-
             position.X += right * deltaSpeed;
             position.Y += top * deltaSpeed;
         }

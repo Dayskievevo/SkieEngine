@@ -12,7 +12,11 @@ namespace Collision {
         private Vector2 position;
         private bool isTrigger;
         public bool isColliding;
+        public bool isTouchingLeft, isTouchingRight, isTouhcingTop, IsTouchingBottom, boundsBottom, boundsTop;
         // checking screen collisions
+
+        public bool isColLeft, isColRight;
+
         public bool isCollidingBounds;
         public Rectangle collider;
 
@@ -32,21 +36,64 @@ namespace Collision {
             this.isTrigger = isTrigger;
         }
 
-        public void CheckCollisionSimple(GameObject owner) {
-
-            // box2d
+        public void CheckCollisionDirectional(GameObject owner) {
             foreach(GameObject gameObject in GameManager._gameObjects) {
-                if(gameObject == owner) { continue; }
+                if(gameObject == owner) {continue;}
 
-                if(owner.rect.Right >= gameObject.rect.Left && owner.rect.Left <= gameObject.rect.Right && 
-                owner.rect.Bottom >= gameObject.rect.Top && owner.rect.Top <= gameObject.rect.Bottom)
-                {
-                   isColliding = true;
-                }
-                if(isColliding) {
+                isTouchingRight = owner.rect.Left < gameObject.rect.Right && 
+                                 owner.rect.Right > gameObject.rect.Right && 
+                                 owner.rect.Bottom > gameObject.rect.Top && 
+                                 owner.rect.Top < gameObject.rect.Bottom;
+
+                isTouchingLeft = owner.rect.Right > gameObject.rect.Left && 
+                                 owner.rect.Left < gameObject.rect.Left && 
+                                 owner.rect.Bottom > gameObject.rect.Top && 
+                                 owner.rect.Top < gameObject.rect.Bottom;
+
+                isTouhcingTop = owner.rect.Bottom > gameObject.rect.Top &&
+                                owner.rect.Top < gameObject.rect.Top &&
+                                owner.rect.Right > gameObject.rect.Left &&
+                                owner.rect.Left < gameObject.rect.Right;
+
+                
+                IsTouchingBottom = owner.rect.Top < gameObject.rect.Bottom &&
+                                owner.rect.Bottom > gameObject.rect.Bottom &&
+                                owner.rect.Right > gameObject.rect.Left &&
+                                owner.rect.Left < gameObject.rect.Right;
+                
+                if(isTouchingLeft | isTouchingRight | isTouhcingTop || IsTouchingBottom) {
                     break;
                 }
             }
+
+            // WINDOW BOUNDS COLLISION
+
+
+            // it would make sense for the is touching top to be the y position plus screen height
+            // but monogames orgini is the top left corner so to go down you add values lolllll
+            if(owner.position.Y + owner.rect.Height > GameManager.HEIGHT) {
+                boundsBottom = true;
+            }
+            if(owner.position.Y < 0 ) {
+                boundsTop = true;
+            }
+        }
+
+        public void CheckCollisionSimple(GameObject owner) {
+
+            // box2d
+            // foreach(GameObject gameObject in GameManager._gameObjects) {
+            //     if(gameObject == owner) { continue; }
+
+            //     if(owner.rect.Right >= gameObject.rect.Left && owner.rect.Left <= gameObject.rect.Right && 
+            //     owner.rect.Bottom >= gameObject.rect.Top && owner.rect.Top <= gameObject.rect.Bottom)
+            //     {
+            //        isColliding = true;
+            //     }
+            //     if(isColliding) {
+            //         break;
+            //     }
+            // }
 
             // screen bounds checking
             if(owner.position.Y < 0 || owner.position.Y + owner.rect.Height > GameManager.HEIGHT) {
