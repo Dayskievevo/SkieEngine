@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Pong
 {
@@ -42,7 +43,9 @@ namespace Pong
             // text
             font = Content.Load<SpriteFont>("Score");
 
+
             var texture = Manager.pixel;
+            var custText = Content.Load<Texture2D>("def_collision_texture");
 
             // setup objects 
             Manager._gameObjects = new List<GameObject>()
@@ -72,7 +75,7 @@ namespace Pong
                 },
 
                 //ball
-                new Ball("ball",texture)
+                new Ball("ball",custText)
                 {
                     width = 40,
                     height = 40,
@@ -87,6 +90,8 @@ namespace Pong
             {
                 gameObject.Start();
             }
+            
+            GameManager.StartGame();
         }
 
         protected override void Update(GameTime gameTime)
@@ -94,7 +99,13 @@ namespace Pong
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             // TODO: Add your update logic here
-            foreach (var gameObject in Manager._gameObjects)
+
+
+            // NOTE
+            // TO LIST CREATES A COPY OF THE LIST SO MODEIYING THE GAMEOBJEECTS
+            // FROM THIS SPECIFIC LOOP MAY NOT AFFECT THE ACTUAL GAMEOBJECTS BUT A COPY
+            // SHOULD BE FINE?
+            foreach (var gameObject in Manager._gameObjects.ToList())
             {
                 gameObject.Update(gameTime);
             }
@@ -117,8 +128,7 @@ namespace Pong
             Manager.spriteBatch.Begin();
 
             Manager.Draw();
-            Manager.spriteBatch.DrawString(font, GameManager.GameTracker.getP1Score().ToString(), new Vector2(Manager.WIDTH / 2,20), Color.White);
-             Manager.spriteBatch.DrawString(font, GameManager.GameTracker.getP2Score().ToString(), new Vector2((Manager.WIDTH / 2) + 40,20), Color.White);
+            Manager.spriteBatch.DrawString(font, GameManager.getCurScore(), new Vector2(Manager.WIDTH / 2,20), Color.White);
             if(Manager.DEBUGINFO) {
                 Manager.spriteBatch.DrawString(font, Manager.getGameObjects(), new Vector2(0, 0), Color.White);
             }

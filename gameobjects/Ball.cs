@@ -39,12 +39,12 @@ namespace Pong
 
             // p2 scores goal
             if(position.X < 0) {
-                GameManager.GameTracker.PlayerScored(false);
+                GameManager.PlayerScored(false);
                 resetBallPos();
             }
 
             if(position.X + rect.Width > Manager.WIDTH) {
-                GameManager.GameTracker.PlayerScored(true);
+                GameManager.PlayerScored(true);
                 resetBallPos();     
             }
         }

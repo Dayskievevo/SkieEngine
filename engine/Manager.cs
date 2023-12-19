@@ -19,6 +19,7 @@ namespace Pong
 
         public static void Draw() {
             foreach(GameObject gameObject in _gameObjects) {
+                // each gameobject is "drawn" to the scene
                 gameObject.Draw(spriteBatch);
             }
         }
@@ -31,6 +32,15 @@ namespace Pong
             }
 
             return temp;
+        }
+
+        public static void DeleteGameObject(string gameObjectName) {
+            foreach(var gameObject in _gameObjects) {
+                if(gameObject.name.Equals(gameObjectName)) {
+                    _gameObjects.Remove(gameObject);
+                    return;
+                }
+            }
         }
     }
 }

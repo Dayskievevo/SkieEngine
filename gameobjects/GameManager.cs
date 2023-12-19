@@ -1,29 +1,52 @@
+using System;
+using System.Dynamic;
+using Pong;
+
 public class GameManager {
 
     private static int p1Score, p2Score;
     public static int scoreToWin = 3;
+    private static string curScore = "xs";
 
-    public class GameTracker {
-        public void StartGame() {
-            p1Score = 0;
-            p2Score = 0;
-        }
+    public static string getCurScore() { return curScore; }
+    public static void setCurScore(string input) { curScore = input; }
 
-        public static int getP1Score() {return p1Score; }
-        public static int getP2Score() {return p2Score;}
-
-        public static void PlayerScored(bool playerOne) {
-            if(playerOne) {p1Score++;} 
-            else {
-                p2Score++;
-            }
-        }
-
-        public enum GAME_STATE
-        {
-            MENU,
-            GAME,
-            OVER
-        }
+    public static void StartGame() {
+        p1Score = 0;
+        p2Score = 0;
+        setCurScore($"{p1Score}   |   {p2Score}");
     }
+
+    public static void PlayerScored(bool playerOne) {
+        string temp = "";
+        if(playerOne) {
+            p1Score++;
+            temp = $"{p1Score}   |   {p2Score}";
+        } 
+        else {
+            p2Score++;
+            temp = $"{p1Score}   |   {p2Score}";
+        }
+
+        if(p1Score == scoreToWin) {
+            temp = "PLAYER 1 WINS";
+            Manager.DeleteGameObject("ball");
+        }
+
+        if(p2Score == scoreToWin) {
+            temp = "PLAYER 2 WINS";
+            Manager.DeleteGameObject("ball");
+        }
+
+        setCurScore(temp);
+
+    }
+
+    public enum GAME_STATE
+    {
+        MENU,
+        GAME,
+        OVER
+    }
+
 }
