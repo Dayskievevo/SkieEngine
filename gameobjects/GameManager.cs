@@ -28,8 +28,8 @@ public class GameManager {
             temp = $"{p1Score}   |   {p2Score}";
         }
 
-        if(p1Score == scoreToWin) {
-            temp = "PLAYER 1 WINS";
+        if(p1Score == scoreToWin || p2Score == scoreToWin) {
+            temp = "PLAYER  WINS";
             Manager.DeleteGameObject("ball");
         }
 

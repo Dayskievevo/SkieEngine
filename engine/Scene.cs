@@ -1,0 +1,6 @@
+namespace Pong {
+    class Scene {
+        
+    }
+
+}

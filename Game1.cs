@@ -85,6 +85,7 @@ namespace Pong
 
                 //collision tester
              };
+
             // copy unity lol
             foreach (var gameObject in Manager._gameObjects)
             {
@@ -118,6 +119,21 @@ namespace Pong
             if(Keyboard.GetState().IsKeyUp(Keys.Tab)) {
                 keyPressed = false;
             } 
+
+            // if(Keyboard.GetState().IsKeyDown(Keys.E) && !keyPressed) {
+            //     keyPressed = true;    
+            //     Manager._gameObjects.Add(new Ball("ballxxx", Manager.pixel) {
+            //         width = 40,
+            //         height = 40,
+            //         position = new Vector2(0,0),
+            //         color = Color.Blue,
+            //     });
+
+            //  }
+            // if(Keyboard.GetState().IsKeyUp(Keys.E)) {
+            //     keyPressed = false;
+            // } 
+
 
             base.Update(gameTime);
         }

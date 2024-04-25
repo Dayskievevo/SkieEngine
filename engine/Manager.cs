@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 
@@ -17,15 +18,18 @@ namespace Pong
         public static List<GameObject> _gameObjects = new List<GameObject>();
 
 
+        // what actually allows the gameobjects to be shown on screen
+        // all gameobjects are stored in a big list so its easy to add
+        // or remove them at runtime
+
         public static void Draw() {
             foreach(GameObject gameObject in _gameObjects) {
-                // each gameobject is "drawn" to the scene
                 gameObject.Draw(spriteBatch);
             }
         }
         
         public static string getGameObjects() {
-            string temp = "Gameobjects: \n";
+            string temp = $"Total GameObjects = {_gameObjects.Count}\n Gameobjects: \n";
             foreach(var gameObject in _gameObjects)
             {
                 temp += gameObject.getGameObject() + ": " +  gameObject.getGameObjectPos() + "\n";

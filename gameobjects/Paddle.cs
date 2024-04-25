@@ -25,6 +25,7 @@ namespace Pong
         public override void Update(GameTime gameTime) {
             Box2D = new BoxCollider2D(height, width, position, false);
             Box2D.CheckCollisionDirectional(this);
+            
 
             if(Box2D.boundsTop) {
                 position.Y = 0;
